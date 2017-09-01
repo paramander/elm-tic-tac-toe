@@ -154,7 +154,7 @@ view model =
         ( Just player, _ ) ->
             Html.div []
                 [ viewWinner player
-                , Html.button [ Events.onClick Restart ] "Restart"
+                , Html.button [ Events.onClick Restart ] [ Html.text "Restart" ]
                 ]
 
         ( _, Board a b c d e f g h i ) ->
