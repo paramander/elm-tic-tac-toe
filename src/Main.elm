@@ -101,6 +101,12 @@ winner board =
         Board _ (Just a) _ _ (Just b) _ _ (Just c) _ ->
             checkTiles a b c
 
+        Board (Just a) _ _ (Just b) _ _ (Just c) _ _ ->
+            checkTiles a b c
+
+        Board _ _ (Just a) _ _ (Just b) _ _ (Just c) ->
+            checkTiles a b c
+
         _ ->
             Nothing
 
