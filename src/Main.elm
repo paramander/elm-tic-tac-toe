@@ -4,6 +4,7 @@ import Html exposing (Html)
 import Html.Attributes exposing (style)
 import Html.Events as Events
 import List
+import List.Extra as List
 import Ports
 import Types exposing (..)
 
@@ -88,41 +89,32 @@ checkPosition position player (Board a b c d e f g h i) =
 
 
 winner : Board -> Maybe Player
-winner board =
+winner (Board a b c d e f g h i) =
     let
-        checkTiles a b c =
+        options =
+            [ ( a, b, c )
+            , ( d, e, f )
+            , ( g, h, i )
+            , ( a, d, g )
+            , ( b, e, h )
+            , ( c, f, i )
+            , ( a, e, i )
+            , ( c, e, g )
+            ]
+
+        checkTiles ( a, b, c ) =
             if a == b && b == c then
-                Just a
+                a
             else
                 Nothing
+
+        isJust v =
+            v |> (==) Nothing |> not
     in
-    case board of
-        Board (Just a) (Just b) (Just c) _ _ _ _ _ _ ->
-            checkTiles a b c
-
-        Board _ _ _ (Just a) (Just b) (Just c) _ _ _ ->
-            checkTiles a b c
-
-        Board _ _ _ _ _ _ (Just a) (Just b) (Just c) ->
-            checkTiles a b c
-
-        Board (Just a) _ _ _ (Just b) _ _ _ (Just c) ->
-            checkTiles a b c
-
-        Board _ _ (Just a) _ (Just b) _ (Just c) _ _ ->
-            checkTiles a b c
-
-        Board _ (Just a) _ _ (Just b) _ _ (Just c) _ ->
-            checkTiles a b c
-
-        Board (Just a) _ _ (Just b) _ _ (Just c) _ _ ->
-            checkTiles a b c
-
-        Board _ _ (Just a) _ _ (Just b) _ _ (Just c) ->
-            checkTiles a b c
-
-        _ ->
-            Nothing
+    options
+        |> List.map checkTiles
+        |> List.find isJust
+        |> Maybe.withDefault Nothing
 
 
 view : Model -> Html Msg
