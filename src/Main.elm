@@ -20,10 +20,22 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Click position ->
-            ( { model | board = checkPosition position model.currentPlayer model.board }, Cmd.none )
+            ( { model
+                | board = checkPosition position model.currentPlayer model.board
+                , currentPlayer = otherPlayer model.currentPlayer
+              }
+            , Cmd.none
+            )
 
         None ->
             ( model, Cmd.none )
+
+
+otherPlayer player =
+    if player == Cross then
+        Circle
+    else
+        Cross
 
 
 checkPosition : Int -> Player -> Board -> Board
