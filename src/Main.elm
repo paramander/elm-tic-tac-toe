@@ -145,6 +145,17 @@ viewTile row column tile =
                 |> (+) column
                 |> (+) 1
                 |> Click
+
+        tileStyle =
+            [ ( "width", "96px" )
+            , ( "height", "96px" )
+            , ( "display", "inline-block" )
+            , ( "background", "lightgray" )
+            , ( "margin", "8px" )
+            , ( "overflow", "hidden" )
+            , ( "text-align", "center" )
+            , ( "line-height", "96px" )
+            ]
     in
     case tile of
         Just Cross ->
@@ -159,15 +170,3 @@ viewTile row column tile =
                 , style tileStyle
                 ]
                 []
-
-
-tileStyle =
-    [ ( "width", "96px" )
-    , ( "height", "96px" )
-    , ( "display", "inline-block" )
-    , ( "background", "lightgray" )
-    , ( "margin", "8px" )
-    , ( "overflow", "hidden" )
-    , ( "text-align", "center" )
-    , ( "line-height", "96px" )
-    ]
