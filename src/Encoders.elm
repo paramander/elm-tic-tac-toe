@@ -8,7 +8,7 @@ encode : Model -> JE.Value
 encode model =
     JE.object
         [ ( "board", encodeBoard model.board )
-        , ( "currentPlayer", encodePlayer <| otherPlayer model.currentPlayer )
+        , ( "currentPlayer", encodePlayer model.currentPlayer )
         ]
 
 
@@ -42,13 +42,3 @@ encodePlayer p =
 
         Circle ->
             JE.string "o"
-
-
-otherPlayer : Player -> Player
-otherPlayer p =
-    case p of
-        Cross ->
-            Circle
-
-        Circle ->
-            Cross
