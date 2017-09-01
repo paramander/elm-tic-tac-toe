@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (Html)
+import List
 import Ports
 import Types exposing (..)
 
@@ -113,9 +114,31 @@ winner board =
 
 view : Model -> Html Msg
 view model =
-    case winner model.board of
-        Just player ->
+    case ( winner model.board, model.board ) of
+        ( Just player, _ ) ->
             Html.text ""
 
-        _ ->
-            Html.text ""
+        ( _, Board a b c d e f g h i ) ->
+            [ [ a, b, c ], [ d, e, f ], [ g, h, i ] ]
+                |> List.map viewRow
+                |> Html.div []
+
+
+viewRow : List Tile -> Html Msg
+viewRow tiles =
+    tiles
+        |> List.map viewTile
+        |> Html.div []
+
+
+viewTile : Tile -> Html Msg
+viewTile tile =
+    case tile of
+        Just Cross ->
+            Html.div [] [ Html.text "X" ]
+
+        Just Circle ->
+            Html.div [] [ Html.text "O" ]
+
+        Nothing ->
+            Html.div [] []
