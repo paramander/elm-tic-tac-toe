@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (Html)
+import Html.Events as Events
 import List
 import Ports
 import Types exposing (..)
@@ -120,19 +121,27 @@ view model =
 
         ( _, Board a b c d e f g h i ) ->
             [ [ a, b, c ], [ d, e, f ], [ g, h, i ] ]
-                |> List.map viewRow
+                |> List.indexedMap viewRow
                 |> Html.div []
 
 
-viewRow : List Tile -> Html Msg
-viewRow tiles =
+viewRow : Int -> List Tile -> Html Msg
+viewRow row tiles =
     tiles
-        |> List.map viewTile
+        |> List.indexedMap (\column tile -> viewTile row column tile)
         |> Html.div []
 
 
-viewTile : Tile -> Html Msg
-viewTile tile =
+viewTile : Int -> Int -> Tile -> Html Msg
+viewTile row column tile =
+    let
+        action =
+            row
+                |> (*) 3
+                |> (+) column
+                |> (+) 1
+                |> Click
+    in
     case tile of
         Just Cross ->
             Html.div [] [ Html.text "X" ]
@@ -141,4 +150,4 @@ viewTile tile =
             Html.div [] [ Html.text "O" ]
 
         Nothing ->
-            Html.div [] []
+            Html.div [ Events.onClick action ] []
