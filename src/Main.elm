@@ -61,7 +61,11 @@ update msg model =
             ( newModel, Cmd.none )
 
         Restart ->
-            ( init, Cmd.none )
+            ( model
+            , init
+                |> Encoders.encode
+                |> Ports.persistModel
+            )
 
         None ->
             ( model, Cmd.none )
