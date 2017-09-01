@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>hoi</title>
+    <meta charset="utf-8">
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+    <script src="/_compile/src/Main.elm"></script>
+</head>
+<body>
+    <script>
+    const app = Elm.Main.fullscreen();
+    // Initialize Firebase
+    const config = {
+        apiKey: "AIzaSyCzryU9q9d5KyJ91lMoB5fHqI6A0iob83E",
+        authDomain: "elmmeetup-f6d7b.firebaseapp.com",
+        databaseURL: "https://elmmeetup-f6d7b.firebaseio.com",
+        projectId: "elmmeetup-f6d7b",
+        storageBucket: "elmmeetup-f6d7b.appspot.com",
+        messagingSenderId: "417322017785"
+    };
+    firebase.initializeApp(config);
+    let ref = firebase.database().ref('global');
+
+    app.ports.persistModel.subscribe((model) => {
+        console.log(model)
+        ref.set(model);
+    });
+
+    ref.on('value', (snapshot) => {
+        let a = snapshot.val();
+        console.log(a);
+        app.ports.updateModel.send(a);
+    });
+    </script>
+</body>
+</html>

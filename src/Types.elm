@@ -1,5 +1,7 @@
 module Types exposing (..)
 
+import Json.Encode
+
 
 type Player
     = Cross
@@ -23,3 +25,4 @@ type alias Model =
 type Msg
     = None
     | Click Int
+    | UpdateModel Json.Encode.Value

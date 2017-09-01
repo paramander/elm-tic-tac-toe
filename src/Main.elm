@@ -1,8 +1,11 @@
 module Main exposing (..)
 
+import Decoders
+import Encoders
 import Html exposing (Html)
 import Html.Attributes exposing (style)
 import Html.Events as Events
+import Json.Decode
 import List
 import List.Extra as List
 import Ports
@@ -15,7 +18,7 @@ main =
         { init = ( init, Cmd.none )
         , update = update
         , view = view
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         }
 
 
@@ -35,15 +38,36 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Click position ->
-            ( { model
-                | board = checkPosition position model.currentPlayer model.board
-                , currentPlayer = otherPlayer model.currentPlayer
-              }
-            , Cmd.none
+            let
+                newModel =
+                    { model
+                        | board = checkPosition position model.currentPlayer model.board
+                        , currentPlayer = otherPlayer model.currentPlayer
+                    }
+            in
+            ( model
+            , newModel
+                |> Encoders.encode
+                |> Ports.persistModel
             )
+
+        UpdateModel encodedBoard ->
+            let
+                newModel =
+                    Json.Decode.decodeValue Decoders.decode encodedBoard
+                        |> Result.mapError (Debug.log "ERROR Json.Decode BOARD")
+                        |> Result.withDefault model
+            in
+            ( newModel, Cmd.none )
 
         None ->
             ( model, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions m =
+    Sub.batch
+        [ Ports.updateModel UpdateModel ]
 
 
 otherPlayer : Player -> Player

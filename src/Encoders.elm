@@ -15,14 +15,23 @@ encode model =
 encodeBoard : Board -> JE.Value
 encodeBoard (Board a b c d e f g h i) =
     JE.list
-        []
+        [ encodeTile a
+        , encodeTile b
+        , encodeTile c
+        , encodeTile d
+        , encodeTile e
+        , encodeTile f
+        , encodeTile g
+        , encodeTile h
+        , encodeTile i
+        ]
 
 
 encodeTile : Tile -> JE.Value
 encodeTile tile =
     tile
         |> Maybe.map encodePlayer
-        |> Maybe.withDefault JE.null
+        |> Maybe.withDefault (JE.string "_")
 
 
 encodePlayer : Player -> JE.Value

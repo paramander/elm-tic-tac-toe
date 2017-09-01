@@ -8,12 +8,12 @@ decode : Decoder Model
 decode =
     JD.map2 Model
         (JD.field "board" decodeBoard)
-        (JD.field "player" (JD.andThen decodePlayer JD.string))
+        (JD.field "currentPlayer" (JD.andThen decodePlayer JD.string))
 
 
 decodeBoard : Decoder Board
 decodeBoard =
-    JD.list decodeTile
+    JD.list (JD.andThen decodeTile JD.string)
         |> JD.andThen decodeBoardFromList
 
 
@@ -28,9 +28,14 @@ decodeBoardFromList tileList =
             JD.fail "No board with 9 tiles supplied to Board decoder"
 
 
-decodeTile : Decoder Tile
-decodeTile =
-    JD.maybe (JD.andThen decodePlayer JD.string)
+decodeTile : String -> Decoder Tile
+decodeTile p =
+    case p of
+        "_" ->
+            JD.succeed Nothing
+
+        _ ->
+            JD.maybe (decodePlayer p)
 
 
 decodePlayer : String -> Decoder Player
