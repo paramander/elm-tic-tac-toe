@@ -60,6 +60,9 @@ update msg model =
             in
             ( newModel, Cmd.none )
 
+        Restart ->
+            ( init, Cmd.none )
+
         None ->
             ( model, Cmd.none )
 
@@ -145,12 +148,25 @@ view : Model -> Html Msg
 view model =
     case ( winner model.board, model.board ) of
         ( Just player, _ ) ->
-            Html.text ""
+            Html.div []
+                [ viewWinner player
+                , Html.button [ Events.onClick Restart ] "Restart"
+                ]
 
         ( _, Board a b c d e f g h i ) ->
             [ [ a, b, c ], [ d, e, f ], [ g, h, i ] ]
                 |> List.indexedMap viewRow
                 |> Html.div []
+
+
+viewWinner : Player -> Html Msg
+viewWinner player =
+    case player of
+        Cross ->
+            Html.text "Player X won"
+
+        Circle ->
+            Html.text "Player O won"
 
 
 viewRow : Int -> List Tile -> Html Msg

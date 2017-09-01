@@ -26,3 +26,4 @@ type Msg
     = None
     | Click Int
     | UpdateModel Json.Encode.Value
+    | Restart
