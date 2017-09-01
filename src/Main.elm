@@ -31,6 +31,7 @@ update msg model =
             ( model, Cmd.none )
 
 
+otherPlayer : Player -> Player
 otherPlayer player =
     if player == Cross then
         Circle
