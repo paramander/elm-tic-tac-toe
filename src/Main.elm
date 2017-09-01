@@ -98,10 +98,18 @@ winner board =
         Board _ _ (Just a) _ (Just b) _ (Just c) _ _ ->
             checkTiles a b c
 
+        Board _ (Just a) _ _ (Just b) _ _ (Just c) _ ->
+            checkTiles a b c
+
         _ ->
             Nothing
 
 
 view : Model -> Html Msg
 view model =
-    Html.text ""
+    case winner model.board of
+        Just player ->
+            Html.text ""
+
+        _ ->
+            Html.text ""
