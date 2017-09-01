@@ -1,10 +1,21 @@
 module Main exposing (..)
 
 import Html exposing (Html)
+import Html.Attributes exposing (style)
 import Html.Events as Events
 import List
 import Ports
 import Types exposing (..)
+
+
+main : Program Never Model Msg
+main =
+    Html.program
+        { init = ( init, Cmd.none )
+        , update = update
+        , view = view
+        , subscriptions = always Sub.none
+        }
 
 
 empty : Board
@@ -12,6 +23,7 @@ empty =
     Board Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing
 
 
+init : Model
 init =
     { board = empty
     , currentPlayer = Cross
@@ -144,10 +156,26 @@ viewTile row column tile =
     in
     case tile of
         Just Cross ->
-            Html.div [] [ Html.text "X" ]
+            Html.div [ style tileStyle ] [ Html.text "X" ]
 
         Just Circle ->
-            Html.div [] [ Html.text "O" ]
+            Html.div [ style tileStyle ] [ Html.text "O" ]
 
         Nothing ->
-            Html.div [ Events.onClick action ] []
+            Html.div
+                [ Events.onClick action
+                , style tileStyle
+                ]
+                []
+
+
+tileStyle =
+    [ ( "width", "96px" )
+    , ( "height", "96px" )
+    , ( "display", "inline-block" )
+    , ( "background", "lightgray" )
+    , ( "margin", "8px" )
+    , ( "overflow", "hidden" )
+    , ( "text-align", "center" )
+    , ( "line-height", "96px" )
+    ]
