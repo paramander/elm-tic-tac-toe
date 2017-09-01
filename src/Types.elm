@@ -18,3 +18,8 @@ type alias Model =
     { board : Board
     , currentPlayer : Player
     }
+
+
+type Msg
+    = None
+    | Click Int
