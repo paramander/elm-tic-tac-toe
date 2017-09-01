@@ -1,6 +1,3 @@
-import Tuple3
-
-
 type Player =
     Cross | Circle
 
